@@ -1,4 +1,4 @@
-import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/screens/home_screen.dart';
@@ -11,68 +11,79 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Widget? _child;
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    HomeScreen(),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 3: School',
+      style: optionStyle,
+    ),
+  ];
 
   @override
   void initState() {
-    _child = const HomeScreen();
     super.initState();
   }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: _child,
-        bottomNavigationBar: FluidNavBar(
-          icons: [
-            FluidNavBarIcon(
-                icon: Icons.home_filled,
-                backgroundColor: kPrimaryColor,
-                extras: {"label": "home"}),
-            FluidNavBarIcon(
-                icon: Icons.menu,
-                backgroundColor:  kPrimaryColor,
-                extras: {"label": "categories"}),
-            FluidNavBarIcon(
-                icon: Icons.shopping_cart,
-                backgroundColor: kPrimaryColor,
-                extras: {"label": "cart"}),
-            FluidNavBarIcon(
-                icon: Icons.person,
-                backgroundColor: kPrimaryColor,
-                extras: {"label": "account"}),
+        body: _widgetOptions.elementAt(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              label: 'Orders',
+            ),
+            BottomNavigationBarItem(
+              icon: Badge(
+                elevation: 0,
+                position: BadgePosition.topEnd(top: -8, end: -4),
+                badgeContent: const Text(
+                  "1",
+                  style: TextStyle(color: Colors.white, fontSize: 8),
+                ),
+                child: const Icon(Icons.shopping_cart),
+              ),
+              label: 'Cart',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Account',
+            ),
           ],
-          onChange: _handleNavigationChange,
-          style: const FluidNavBarStyle(iconUnselectedForegroundColor: Colors.white, iconSelectedForegroundColor: Colors.white, barBackgroundColor: kPrimaryColor, ),
-          scaleFactor: 1.5,
-          defaultIndex: 0,
-          itemBuilder: (icon, item) => Semantics(
-            label: icon.extras!["label"],
-            child: item,
-          ),
+          currentIndex: _selectedIndex,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.amber[200],
+          unselectedItemColor: kSecondaryColor,
+          backgroundColor: kPrimaryColor,
+          iconSize: 24,
+          onTap: _onItemTapped,
         ),
       ),
     );
-  }
-  void _handleNavigationChange(int index) {
-    setState(() {
-      switch (index) {
-        case 0:
-          _child = HomeScreen();
-          break;
-        case 1:
-          _child = HomeScreen();
-          break;
-        case 2:
-          _child = HomeScreen();
-          break;
-      }
-      _child = AnimatedSwitcher(
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeIn,
-        duration: const Duration(milliseconds: 300),
-        child: _child,
-      );
-    });
   }
 }
