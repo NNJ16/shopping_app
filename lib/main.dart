@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/screens/admin_screen.dart';
+import 'package:shopping_app/screens/admin/admin_screen.dart';
+import 'package:shopping_app/screens/home_screen.dart';
 import 'package:shopping_app/screens/main_screen.dart';
 
 void main() {
