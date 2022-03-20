@@ -13,7 +13,7 @@ class AddItemScreen extends StatefulWidget {
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
-  String dropdownValue = "Kg";
+  String dropdownValue = "100g";
   String _title = "Add Item";
 
   File? image;
@@ -75,7 +75,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 12.0),
                 child: Text(
-                  'Item price',
+                  'Item price (per unit)',
                   style: TextStyle(color: Colors.black54),
                 ),
               ),
@@ -88,6 +88,32 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 ),
               ),
               TextFormField(),
+              const Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Text(
+                  'Select amount per unit',
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ),
+              DropdownButton<String>(
+                isExpanded: true,
+                value: dropdownValue,
+                elevation: 16,
+                style: const TextStyle(color: Colors.black87, fontSize: 16),
+                onChanged: (String? newValue) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: (<String>["None","100g", "200g", "500g", "1Kg", "100mL", "200mL","500mL","1L"])
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
               const Padding(
                 padding: EdgeInsets.only(top: 12.0, bottom: 10),
                 child: Text(
@@ -129,32 +155,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                    ),
                  )
                 ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 12.0),
-                child: Text(
-                  'Select metric',
-                  style: TextStyle(color: Colors.black54),
-                ),
-              ),
-              DropdownButton<String>(
-                isExpanded: true,
-                value: dropdownValue,
-                elevation: 16,
-                style: const TextStyle(color: Colors.black87, fontSize: 16),
-                onChanged: (String? newValue) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  setState(() {
-                    dropdownValue = newValue!;
-                  });
-                },
-                items: (<String>["Kg", "g", "L", "mL"])
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
               ),
             ],
           ),
