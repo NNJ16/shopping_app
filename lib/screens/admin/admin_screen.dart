@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
+import 'package:shopping_app/screens/admin/item/add_item.dart';
 import 'dashboard_screen.dart';
-import 'item_screen.dart';
-import 'order_screen.dart';
-import 'supplier_screen.dart';
+import 'item/item_screen.dart';
+import 'order/order_screen.dart';
+import 'supplier/supplier_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -26,6 +27,21 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: (_title == "Items")
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddItemScreen()),
+                );
+              },
+              backgroundColor: kPrimaryColor,
+              child: const Icon(
+                Icons.add,
+                size: 35,
+              ),
+            )
+          : null,
       appBar: AppBar(
         title: Text(_title),
         backgroundColor: kPrimaryColor,
