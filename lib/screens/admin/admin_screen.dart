@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
-import 'package:shopping_app/screens/dashboard_screen.dart';
+import 'dashboard_screen.dart';
+import 'item_screen.dart';
+import 'order_screen.dart';
+import 'supplier_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -10,14 +13,24 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  int _selectedIndex = 0;
+  String _title = "Dashboard";
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    DashboardScreen(),
+    OrderScreen(),
+    ItemScrren(),
+    SupplierScreen()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Dashboard"),
+        title: Text(_title),
         backgroundColor: kPrimaryColor,
       ),
-      body: const DashboardScreen(),
+      body: _widgetOptions.elementAt(_selectedIndex),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -44,7 +57,9 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0,),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.0,
+                    ),
                     child: Text("roberts@gmail.com",
                         style: TextStyle(color: Colors.white)),
                   ),
@@ -65,6 +80,10 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
+                setState(() {
+                  _title = "Dashboard";
+                  _selectedIndex = 0;
+                });
                 Navigator.pop(context);
               },
             ),
@@ -82,6 +101,10 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
+                setState(() {
+                  _selectedIndex = 1;
+                  _title = "Orders";
+                });
                 Navigator.pop(context);
               },
             ),
@@ -99,6 +122,10 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                  _title = "Items";
+                });
                 Navigator.pop(context);
               },
             ),
@@ -116,6 +143,10 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
+                setState(() {
+                  _selectedIndex = 3;
+                  _title = "Suppliers";
+                });
                 Navigator.pop(context);
               },
             ),

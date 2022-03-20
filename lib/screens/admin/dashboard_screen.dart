@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/components/dashboard_card.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -10,6 +9,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Column(
