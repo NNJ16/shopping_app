@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   outline_search_bar: ^2.3.0
   badges: ^2.0.2
+  image_picker: ^0.8.4+11
 
 dev_dependencies:
   flutter_test:
