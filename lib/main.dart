@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/screens/admin/admin_screen.dart';
-import 'package:shopping_app/screens/home_screen.dart';
-import 'package:shopping_app/screens/main_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
