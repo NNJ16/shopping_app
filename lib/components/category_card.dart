@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/model/category.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key}) : super(key: key);
+  final Category category;
+  const CategoryCard({Key? key, required this.category}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +17,13 @@ class CategoryCard extends StatelessWidget {
           children: [
             Card(
               child: Image.network(
-                "https://www.transparentpng.com/thumb/vegetables/all-fruits-and-vegetables-in-basket-background-transparent-veD4qx.png",
+                category.url,
                 height: 80,
                 width: 80,
+                fit: BoxFit.fill,
               ),
             ),
-            const Text("Vegetables")
+            Text(category.category)
           ],
         ),
       ),
