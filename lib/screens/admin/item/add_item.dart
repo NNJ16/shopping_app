@@ -256,13 +256,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     dropdownValue0 = newValue!;
                   });
                 },
-                items: (<String>[
-                  "Vegetables",
-                  "Fruits",
-                  "Meat",
-                  "Fish",
-                  "Bevarages",
-                ]).map<DropdownMenuItem<String>>((String value) {
+                items: (categoryStringList).map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

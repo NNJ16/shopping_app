@@ -3,7 +3,8 @@ import 'package:shopping_app/model/category.dart';
 
 class CategoryCard extends StatelessWidget {
   final Category category;
-  const CategoryCard({Key? key, required this.category}) : super(key: key);
+  final void Function(String category) callBack;
+  const CategoryCard({Key? key, required this.category, required this.callBack}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class CategoryCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: (){
-
+          callBack(category.category);
         },
         child: Column(
           children: [

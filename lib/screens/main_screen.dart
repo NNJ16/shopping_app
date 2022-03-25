@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
+import 'package:shopping_app/dto/item_dto.dart';
+import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,27 +14,43 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  int _noOfItems = 0;
+  final _cartItemList =<ItemDTO>[];
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: School',
-      style: optionStyle,
-    ),
-  ];
+
+  List<Widget> _children() => [
+        HomeScreen(
+          callBack: updateCart,
+        ),
+        Text(
+          'Index 1: Business',
+          style: optionStyle,
+        ),
+        CartSreen(cartItemList: _cartItemList, callBack: deleteCart,),
+        Text(
+          'Index 3: School',
+          style: optionStyle,
+        ),
+      ];
 
   @override
   void initState() {
     super.initState();
+  }
+
+  updateCart(ItemDTO itemDTO) {
+    _cartItemList.add(itemDTO);
+    setState(() {
+      _noOfItems = _cartItemList.length;
+    });
+  }
+
+  deleteCart(){
+    setState(() {
+      _cartItemList.clear();
+      _noOfItems =0;
+    });
   }
 
   void _onItemTapped(int index) {
@@ -43,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = _children();
     return SafeArea(
       child: Scaffold(
         body: _widgetOptions.elementAt(_selectedIndex),
@@ -60,9 +79,9 @@ class _MainScreenState extends State<MainScreen> {
               icon: Badge(
                 elevation: 0,
                 position: BadgePosition.topEnd(top: -8, end: -4),
-                badgeContent: const Text(
-                  "1",
-                  style: TextStyle(color: Colors.white, fontSize: 8),
+                badgeContent: Text(
+                  _noOfItems.toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 8),
                 ),
                 child: const Icon(Icons.shopping_cart),
               ),
@@ -77,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.amber[200],
+          selectedItemColor: Colors.amber[600],
           unselectedItemColor: kSecondaryColor,
           backgroundColor: kPrimaryColor,
           iconSize: 24,

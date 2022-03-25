@@ -20,28 +20,13 @@ class _AdminScreenState extends State<AdminScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardScreen(),
     OrderScreen(),
-    ItemScrren(),
+    ItemScreen(),
     SupplierScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: (_title == "Items")
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddItemScreen()),
-                );
-              },
-              backgroundColor: kPrimaryColor,
-              child: const Icon(
-                Icons.add,
-                size: 35,
-              ),
-            )
-          : null,
       appBar: AppBar(
         title: Text(_title),
         backgroundColor: kPrimaryColor,

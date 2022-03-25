@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/screens/admin/admin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:shopping_app/screens/login_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AdminScreen(),
+      home: const LoginScreen(),
     );
   }
 }   
