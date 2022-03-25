@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/dto/item_dto.dart';
 
-import '../screens/admin/item/add_item.dart';
-
 class ItemEditCard extends StatefulWidget {
   final ItemDTO itemDTO;
-  const ItemEditCard({Key? key, required this.itemDTO}) : super(key: key);
+  final void Function(ItemDTO) callBack;
+  const ItemEditCard({Key? key, required this.itemDTO, required this.callBack}) : super(key: key);
 
   @override
   State<ItemEditCard> createState() => _ItemEditCardState();
@@ -29,6 +28,12 @@ class _ItemEditCardState extends State<ItemEditCard> {
   void initState() {
     setImage(widget.itemDTO.imgPath);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(ItemEditCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setImage(widget.itemDTO.imgPath);
   }
 
   @override
@@ -78,11 +83,7 @@ class _ItemEditCardState extends State<ItemEditCard> {
                   ),
                   IconButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>AddItemScreen(title: "Edit Item", itemDTO: widget.itemDTO,)),
-                      ).then((_) => setState(() {}));
+                      widget.callBack(widget.itemDTO);
                     },
                     icon: const Icon(
                       Icons.mode_edit,
