@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/screens/admin/admin_screen.dart';
-import 'package:shopping_app/screens/home_screen.dart';
-import 'package:shopping_app/screens/main_screen.dart';
+
+import '../components/sign_in_button.dart';
+import '../services/authentication_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,33 +54,33 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainScreen()),
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        // Icon(Icons.mail),
-                        // SizedBox(
-                        //   width: 10,
-                        // ),
-                        Text('Sign Up')
-                      ],
-                    ),
-                    style:
-                        ElevatedButton.styleFrom(shape: const StadiumBorder()),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 40,
+                //   ),
+                //   child: ElevatedButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => const MainScreen()),
+                //       );
+                //     },
+                //     child: Row(
+                //       mainAxisSize: MainAxisSize.min,
+                //       //mainAxisAlignment: MainAxisAlignment.center,
+                //       children: const [
+                //         // Icon(Icons.mail),
+                //         // SizedBox(
+                //         //   width: 10,
+                //         // ),
+                //         Text('Sign Up')
+                //       ],
+                //     ),
+                //     style:
+                //         ElevatedButton.styleFrom(shape: const StadiumBorder()),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 40,
@@ -105,6 +107,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     style:
                         ElevatedButton.styleFrom(shape: const StadiumBorder()),
                   ),
+                ),
+                FutureBuilder(
+                  future: Authentication.initializeFirebase(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Error initializing Firebase');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return const GoogleSignInButton();
+                    }
+                    return const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.white,
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 40,

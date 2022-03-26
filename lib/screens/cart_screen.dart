@@ -26,7 +26,11 @@ class _CartSreenState extends State<CartSreen> {
     }
     setState(() {
       _subTotal = total;
-      _delCharge = 250;
+      if(total > 0){
+        _delCharge = 250;
+      }else{
+        _delCharge = 0;
+      }
       _total = total + _delCharge;
     });
   }
