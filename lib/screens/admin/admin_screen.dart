@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/screens/admin/item/add_item.dart';
+import '../login_screen.dart';
 import 'dashboard_screen.dart';
 import 'item/item_screen.dart';
 import 'order/order_screen.dart';
@@ -165,8 +166,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
               },
             ),
           ],

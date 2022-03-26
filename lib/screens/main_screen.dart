@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/dto/item_dto.dart';
+import 'package:shopping_app/screens/account_screen.dart';
 import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/home_screen.dart';
 import 'package:shopping_app/services/authentication_service.dart';
@@ -29,10 +30,7 @@ class _MainScreenState extends State<MainScreen> {
           style: optionStyle,
         ),
         CartSreen(cartItemList: _cartItemList, callBack: deleteCart,),
-        Text(
-          'Index 3: School',
-          style: optionStyle,
-        ),
+        AccountScreen()
       ];
 
   @override
@@ -55,9 +53,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onItemTapped(int index) {
-    if(index == 3){
-      Authentication.signOut(context: context);
-    }
     setState(() {
       _selectedIndex = index;
     });
