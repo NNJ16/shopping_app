@@ -19,7 +19,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: _isSigningIn
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : OutlinedButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -56,14 +56,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   children: const <Widget>[
                     Image(
                       image: AssetImage("assets/images/google_logo.png"),
-                      height: 25.0,
+                      height: 18.0,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
                         'Sign in with Google',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           color: Colors.black54,
                           fontWeight: FontWeight.w600,
                         ),

@@ -4,6 +4,7 @@ import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/dto/item_dto.dart';
 import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/home_screen.dart';
+import 'package:shopping_app/services/authentication_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -54,6 +55,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onItemTapped(int index) {
+    if(index == 3){
+      Authentication.signOut(context: context);
+    }
     setState(() {
       _selectedIndex = index;
     });

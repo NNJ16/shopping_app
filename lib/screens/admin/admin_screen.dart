@@ -166,6 +166,7 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
           ],
