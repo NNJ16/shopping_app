@@ -225,23 +225,23 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 12.0),
                 child: Text(
+                  'Supplier Item',
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ),
+              TextFormField(
+                controller: _supplierItemController,
+                validator: _mandatoryValidator,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
                   'Supplier Quantity',
                   style: TextStyle(color: Colors.black54),
                 ),
               ),
               TextFormField(
                 controller: _supplierQuantityController,
-                validator: _mandatoryValidator,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: Text(
-                  'Supplier item',
-                  style: TextStyle(color: Colors.black54),
-                ),
-              ),
-              TextFormField(
-                controller: _supplierItemController,
                 validator: _mandatoryValidator,
               ),
 
