@@ -156,6 +156,23 @@ class _AdminScreenState extends State<AdminScreen> {
               title: Row(
                 children: const [
                   Icon(
+                    Icons.forum,
+                    color: kPrimaryColor,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('Messages')
+                ],
+              ),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: const [
+                  Icon(
                     Icons.exit_to_app,
                     color: kPrimaryColor,
                   ),

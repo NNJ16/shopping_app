@@ -5,6 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shopping_app/screens/main_screen.dart';
 
+import '../screens/login_screen.dart';
+
 class Authentication {
   static Future<FirebaseApp> initializeFirebase(BuildContext context) async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -14,7 +16,9 @@ class Authentication {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const MainScreen(),
+          builder: (context) => MainScreen(
+            user: user,
+          ),
         ),
       );
     }
@@ -88,6 +92,11 @@ class Authentication {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         Authentication.customSnackBar(

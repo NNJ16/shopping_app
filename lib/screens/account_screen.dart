@@ -5,10 +5,13 @@ import '../services/authentication_service.dart';
 import 'login_screen.dart';
 
 class AccountScreen extends StatelessWidget {
+  const AccountScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Profile"),
         backgroundColor: kPrimaryColor,
       ),
@@ -56,11 +59,6 @@ class AccountScreen extends StatelessWidget {
                 icon: Icons.power_settings_new,
                 onPressed: () {
                   Authentication.signOut(context: context);
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                  );
                 },
               ),
               const Divider(

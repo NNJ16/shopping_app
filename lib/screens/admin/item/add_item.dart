@@ -9,11 +9,13 @@ import 'package:shopping_app/dto/item_dto.dart';
 import 'package:shopping_app/model/item.dart';
 import 'package:shopping_app/services/item_service.dart';
 import '../../../components/constants.dart';
+import '../../../components/yse_no_model.dart';
 
 class AddItemScreen extends StatefulWidget {
   final String title;
   final ItemDTO? itemDTO;
-  const AddItemScreen({Key? key, this.title = "", this.itemDTO})
+  final void Function() callBack;
+  const AddItemScreen({Key? key, this.title = "", this.itemDTO, required this.callBack})
       : super(key: key);
 
   @override
@@ -115,6 +117,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             itemDescription: _itemDesController.text,
             itemPrice: double.parse(_itemPriceController.text));
         uploadFile();
+        widget.callBack();
         return await ItemService.addItem(item);
       } else {
         return "";
@@ -135,12 +138,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
             itemDescription: _itemDesController.text,
             itemPrice: double.parse(_itemPriceController.text));
         uploadFile();
+        widget.callBack();
         return await ItemService.editItem(item, widget.itemDTO!.itemId);
       } else {
         return false;
       }
     } else {
-       if (_formKey.currentState!.validate()) {
+      if (_formKey.currentState!.validate()) {
         Item item = Item(
             imgPath: widget.itemDTO!.imgPath,
             itemName: _itemNameController.text,
@@ -156,8 +160,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
-  Future<bool> deleteItem() async{
-    return await ItemService.deleteItem(widget.itemDTO!.itemId);
+  Future<void> _deleteItem(BuildContext context) async {
+    bool result = await ItemService.deleteItem(widget.itemDTO!.itemId);
+    if (result) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -166,37 +173,42 @@ class _AddItemScreenState extends State<AddItemScreen> {
       appBar: AppBar(
         title: Text(_title),
         backgroundColor: kPrimaryColor,
-        actions: (widget.title != "Edit Item"? <Widget>[
-          IconButton(
-            onPressed: () async {
-              String result = await addItem();
-              if (result != "") {
-                Navigator.pop(context);
-              }
-            },
-            icon: const Icon(Icons.done),
-          )
-        ]: <Widget>[
-                    IconButton(
-            onPressed: () async {
-              bool result = await deleteItem();
-              if (result) {
-                Navigator.pop(context);
-              }
-            },
-            icon: const Icon(Icons.delete),
-          ),
-          IconButton(
-            onPressed: () async {
-              bool result = await editItem();
-              if (result) {
-                Navigator.pop(context);
-              }
-            },
-            icon: const Icon(Icons.done),
-          )
-        ]
-        ),
+        actions: (widget.title != "Edit Item"
+            ? <Widget>[
+                IconButton(
+                  onPressed: () async {
+                    String result = await addItem();
+                    if (result != "") {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.done),
+                )
+              ]
+            : <Widget>[
+                IconButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext buildContext) => (YesNoModel(
+                          buildContext: context,
+                          msg:
+                              "Are you sure you want to delete this item?",
+                          callBack: _deleteItem)),
+                    );
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    bool result = await editItem();
+                    if (result) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.done),
+                )
+              ]),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -236,7 +248,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ),
               TextFormField(
                 controller: _itemDesController,
-                validator: _mandatoryValidator,
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 16.0),
@@ -256,7 +267,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     dropdownValue0 = newValue!;
                   });
                 },
-                items: (categoryStringList).map<DropdownMenuItem<String>>((String value) {
+                items: (categoryStringList)
+                    .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -318,14 +330,20 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               height: 150,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Image.file(_image!, fit: BoxFit.fill,),
+                                child: Image.file(
+                                  _image!,
+                                  fit: BoxFit.fill,
+                                ),
                               ))
                           : SizedBox(
                               width: 160,
                               height: 150,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Image.network(_imgURL, fit: BoxFit.fill,),
+                                child: Image.network(
+                                  _imgURL,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                       Padding(

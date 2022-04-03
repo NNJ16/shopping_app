@@ -33,8 +33,16 @@ class _ItemScreenState extends State<ItemScreen> {
           builder: (context) => AddItemScreen(
                 title: "Edit Item",
                 itemDTO: itemDTO,
+                callBack: refresh,
               )),
     ).then((_) => setState(() {}));
+  }
+
+  void refresh(){
+    print('Heloo...............................................');
+    setState(() {
+      
+    });
   }
 
   @override
@@ -44,7 +52,7 @@ class _ItemScreenState extends State<ItemScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddItemScreen()),
+            MaterialPageRoute(builder: (context) => AddItemScreen(callBack: refresh,)),
           ).then((_) => setState(() {}));
         },
         backgroundColor: kPrimaryColor,
