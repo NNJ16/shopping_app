@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/screens/admin/admin_screen.dart';
 import '../components/sign_in_button.dart';
 import '../services/authentication_service.dart';
@@ -33,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const Center(
                 child: Text(
                   "FreshMart",
-                  style: TextStyle(fontSize: 40, color: Colors.blue),
+                  style: TextStyle(fontSize: 40, color: kPrimaryColor),
                 ),
               ),
               const SizedBox(
@@ -86,23 +87,35 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,
                     ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_userNameController.text == "admin" &&
-                            _passwordController.text == "1234") {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AdminScreen()),
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(fontSize: 14),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints.tightFor(height: 45),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_userNameController.text == "admin" &&
+                              _passwordController.text == "1234") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const AdminScreen()),
+                            );
+                          } else {
+                            const snackBar = SnackBar(
+                                content: Text("Invalid username or password."),
+                                backgroundColor: Colors.red);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          elevation: 0,
+                          primary: kPrimaryColor,
+                        ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(), elevation: 0),
                     ),
                   ),
                   const Center(
@@ -131,9 +144,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     },
-                  ),
-                  const SizedBox(
-                    height: 40,
                   ),
                 ],
               ),

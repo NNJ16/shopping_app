@@ -1,16 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:outline_search_bar/outline_search_bar.dart';
 import 'package:shopping_app/components/category_card.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/components/item_card.dart';
-import 'package:shopping_app/screens/main_screen.dart';
-
 import '../dto/item_dto.dart';
 import '../services/item_service.dart';
 
 class HomeScreen extends StatefulWidget {
+  final User user;
   final void Function(ItemDTO itemDTO) callBack;
-  const HomeScreen({Key? key, required this.callBack}) : super(key: key);
+  const HomeScreen({Key? key, required this.callBack, required this.user}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -59,18 +59,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Nov, 9",
-                              style: TextStyle(color: Colors.white),
+                              "FreshMart",
+                              style: TextStyle(color: Colors.white, fontWeight:  FontWeight.bold),
                             ),
                             Row(
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   "Hi, ",
                                   style: TextStyle(
                                       fontSize: 24, color: Colors.white),
                                 ),
-                                Text("Steven!",
-                                    style: TextStyle(
+                                Text(widget.user.displayName!.split(' ')[0] +"!",
+                                    style: const TextStyle(
                                         fontSize: 24, color: Colors.white))
                               ],
                             ),

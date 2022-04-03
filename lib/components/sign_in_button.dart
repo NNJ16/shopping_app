@@ -43,7 +43,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 if (user != null) {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => MainScreen()
+                      builder: (context) => MainScreen(user: user,)
                     ),
                   );
                 }
@@ -56,14 +56,14 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   children: const <Widget>[
                     Image(
                       image: AssetImage("assets/images/google_logo.png"),
-                      height: 18.0,
+                      height: 24.0,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 10),
                       child: Text(
                         'Sign in with Google',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: Colors.black54,
                           fontWeight: FontWeight.w600,
                         ),

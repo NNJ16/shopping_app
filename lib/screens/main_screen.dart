@@ -1,14 +1,16 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/dto/item_dto.dart';
 import 'package:shopping_app/screens/account_screen.dart';
+import 'package:shopping_app/screens/order_screen.dart';
 import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/home_screen.dart';
-import 'package:shopping_app/services/authentication_service.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final User user;
+  const MainScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -17,20 +19,23 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   int _noOfItems = 0;
-  final _cartItemList =<ItemDTO>[];
+  final _cartItemList = <ItemDTO>[];
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   List<Widget> _children() => [
         HomeScreen(
           callBack: updateCart,
+          user: widget.user,
         ),
-        Text(
-          'Index 1: Business',
-          style: optionStyle,
+        OrderScreen(user: widget.user,),
+        CartSreen(
+          navigateToHome: navigateToHome,
+          cartItemList: _cartItemList,
+          callBack: deleteCart,
+          user: widget.user,
         ),
-        CartSreen(cartItemList: _cartItemList, callBack: deleteCart,),
-        AccountScreen()
+        const AccountScreen()
       ];
 
   @override
@@ -45,10 +50,16 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  deleteCart(){
+  deleteCart() async{
     setState(() {
       _cartItemList.clear();
-      _noOfItems =0;
+      _noOfItems = 0;
+    });
+  }
+  
+  navigateToHome() async{
+    setState(() {
+      _selectedIndex = 0;
     });
   }
 

@@ -30,11 +30,11 @@ class _ItemEditCardState extends State<ItemEditCard> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(ItemEditCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    setImage(widget.itemDTO.imgPath);
-  }
+  // @override
+  // void didUpdateWidget(ItemEditCard oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   setImage(widget.itemDTO.imgPath);
+  // }
 
   @override
   Widget build(BuildContext context) {
