@@ -14,8 +14,7 @@ import '../../../components/yse_no_model.dart';
 class AddItemScreen extends StatefulWidget {
   final String title;
   final ItemDTO? itemDTO;
-  final void Function() callBack;
-  const AddItemScreen({Key? key, this.title = "", this.itemDTO, required this.callBack})
+  const AddItemScreen({Key? key, this.title = "", this.itemDTO})
       : super(key: key);
 
   @override
@@ -117,7 +116,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
             itemDescription: _itemDesController.text,
             itemPrice: double.parse(_itemPriceController.text));
         uploadFile();
-        widget.callBack();
         return await ItemService.addItem(item);
       } else {
         return "";
@@ -138,7 +136,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
             itemDescription: _itemDesController.text,
             itemPrice: double.parse(_itemPriceController.text));
         uploadFile();
-        widget.callBack();
         return await ItemService.editItem(item, widget.itemDTO!.itemId);
       } else {
         return false;

@@ -33,17 +33,10 @@ class _ItemScreenState extends State<ItemScreen> {
           builder: (context) => AddItemScreen(
                 title: "Edit Item",
                 itemDTO: itemDTO,
-                callBack: refresh,
               )),
     ).then((_) => setState(() {}));
   }
 
-  void refresh(){
-    print('Heloo...............................................');
-    setState(() {
-      
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +45,7 @@ class _ItemScreenState extends State<ItemScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddItemScreen(callBack: refresh,)),
+            MaterialPageRoute(builder: (context) => const AddItemScreen()),
           ).then((_) => setState(() {}));
         },
         backgroundColor: kPrimaryColor,

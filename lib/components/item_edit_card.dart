@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
@@ -16,11 +18,13 @@ class _ItemEditCardState extends State<ItemEditCard> {
   String imgURL = "";
 
   setImage(String imgPath) async {
-    final destination = 'files/' + imgPath;
+    Timer(const Duration(seconds: 2), () async{
+          final destination = 'files/' + imgPath;
     final ref = FirebaseStorage.instance.ref(destination).child('image');
     var url = await ref.getDownloadURL();
     setState(() {
       imgURL = url;
+    });  
     });
   }
 
@@ -30,11 +34,11 @@ class _ItemEditCardState extends State<ItemEditCard> {
     super.initState();
   }
 
-  // @override
-  // void didUpdateWidget(ItemEditCard oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   setImage(widget.itemDTO.imgPath);
-  // }
+  @override
+  void didUpdateWidget(ItemEditCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setImage(widget.itemDTO.imgPath);
+  }
 
   @override
   Widget build(BuildContext context) {
