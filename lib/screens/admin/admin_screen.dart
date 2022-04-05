@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/screens/admin/item/add_item.dart';
+import '../login_screen.dart';
 import 'dashboard_screen.dart';
 import 'item/item_screen.dart';
 import 'order/order_screen.dart';
@@ -20,28 +21,13 @@ class _AdminScreenState extends State<AdminScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardScreen(),
     OrderScreen(),
-    ItemScrren(),
+    ItemScreen(),
     SupplierScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: (_title == "Items")
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddItemScreen()),
-                );
-              },
-              backgroundColor: kPrimaryColor,
-              child: const Icon(
-                Icons.add,
-                size: 35,
-              ),
-            )
-          : null,
       appBar: AppBar(
         title: Text(_title),
         backgroundColor: kPrimaryColor,
@@ -170,6 +156,23 @@ class _AdminScreenState extends State<AdminScreen> {
               title: Row(
                 children: const [
                   Icon(
+                    Icons.forum,
+                    color: kPrimaryColor,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text('Messages')
+                ],
+              ),
+              onTap: () {
+
+              },
+            ),
+            ListTile(
+              title: Row(
+                children: const [
+                  Icon(
                     Icons.exit_to_app,
                     color: kPrimaryColor,
                   ),
@@ -180,7 +183,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
-                Navigator.pop(context);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
               },
             ),
           ],

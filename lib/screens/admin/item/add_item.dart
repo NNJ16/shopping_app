@@ -5,27 +5,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:shopping_app/dto/item_dto.dart';
 import 'package:shopping_app/model/item.dart';
 import 'package:shopping_app/services/item_service.dart';
 import '../../../components/constants.dart';
+import '../../../components/yse_no_model.dart';
 
 class AddItemScreen extends StatefulWidget {
-  const AddItemScreen({Key? key}) : super(key: key);
+  final String title;
+  final ItemDTO? itemDTO;
+  const AddItemScreen({Key? key, this.title = "", this.itemDTO})
+      : super(key: key);
 
   @override
   State<AddItemScreen> createState() => _AddItemScreenState();
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
+  String _imgURL =
+      "https://media.istockphoto.com/vectors/image-preview-icon-picture-placeholder-for-website-or-uiux-design-vector-id1222357475?k=20&m=1222357475&s=170667a&w=0&h=YGycIDbBRAWkZaSvdyUFvotdGfnKhkutJhMOZtIoUKY=";
   String dropdownValue = "100g";
+  String dropdownValue0 = "Vegetables";
   String _title = "Add Item";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FirebaseStorage storage = FirebaseStorage.instance;
   File? _image;
 
-  TextEditingController _itemNameController = TextEditingController();
-  TextEditingController _itemPriceController = TextEditingController();
-  TextEditingController _itemDesController = TextEditingController();
+  final TextEditingController _itemNameController = TextEditingController();
+  final TextEditingController _itemPriceController = TextEditingController();
+  final TextEditingController _itemDesController = TextEditingController();
+
+  setImage(String imgPath) async {
+    final destination = 'files/' + imgPath;
+    final ref = FirebaseStorage.instance.ref(destination).child('image');
+    var url = await ref.getDownloadURL();
+    setState(() {
+      _imgURL = url;
+    });
+  }
+
+  @override
+  initState() {
+    if (widget.title != "") {
+      _itemNameController.text = widget.itemDTO!.itemName;
+      _itemPriceController.text = widget.itemDTO!.itemPrice.toString();
+      _itemDesController.text = widget.itemDTO!.itemDescription;
+      dropdownValue = widget.itemDTO!.itemAmount;
+      dropdownValue0 = widget.itemDTO!.itemcategory;
+
+      setImage(widget.itemDTO!.imgPath);
+
+      setState(() {
+        _title = widget.title;
+      });
+    }
+    super.initState();
+  }
 
   Future pickImage() async {
     try {
@@ -51,15 +86,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
-//   Future getImage() async {
-//    // final fileName = basename(_image!.path);
-//     final destination = 'files/384f2105-12b5-49f3-beb3-e109e762c8bd3367518485479624375.jpg';
-//     final ref = FirebaseStorage.instance.ref(destination).child('image');
-// // no need of the file extension, the name will do fine.
-//     var url = await ref.getDownloadURL();
-//     print(url);
-//   }
-
   Future pickImageC() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -79,18 +105,62 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
-  Future<void> additem() async {
+  Future<String> addItem() async {
     if (_image != null) {
       if (_formKey.currentState!.validate()) {
         Item item = Item(
             imgPath: basename(_image!.path),
             itemName: _itemNameController.text,
             itemAmount: dropdownValue,
+            itemCategory: dropdownValue0,
             itemDescription: _itemDesController.text,
             itemPrice: double.parse(_itemPriceController.text));
-        await ItemService.addItem(item);
         uploadFile();
+        return await ItemService.addItem(item);
+      } else {
+        return "";
       }
+    } else {
+      return "";
+    }
+  }
+
+  Future<bool> editItem() async {
+    if (_image != null) {
+      if (_formKey.currentState!.validate()) {
+        Item item = Item(
+            imgPath: basename(_image!.path),
+            itemName: _itemNameController.text,
+            itemAmount: dropdownValue,
+            itemCategory: dropdownValue0,
+            itemDescription: _itemDesController.text,
+            itemPrice: double.parse(_itemPriceController.text));
+        uploadFile();
+        return await ItemService.editItem(item, widget.itemDTO!.itemId);
+      } else {
+        return false;
+      }
+    } else {
+      if (_formKey.currentState!.validate()) {
+        Item item = Item(
+            imgPath: widget.itemDTO!.imgPath,
+            itemName: _itemNameController.text,
+            itemAmount: dropdownValue,
+            itemCategory: dropdownValue0,
+            itemDescription: _itemDesController.text,
+            itemPrice: double.parse(_itemPriceController.text));
+        uploadFile();
+        return await ItemService.editItem(item, widget.itemDTO!.itemId);
+      } else {
+        return false;
+      }
+    }
+  }
+
+  Future<void> _deleteItem(BuildContext context) async {
+    bool result = await ItemService.deleteItem(widget.itemDTO!.itemId);
+    if (result) {
+      Navigator.pop(context);
     }
   }
 
@@ -100,14 +170,42 @@ class _AddItemScreenState extends State<AddItemScreen> {
       appBar: AppBar(
         title: Text(_title),
         backgroundColor: kPrimaryColor,
-        actions: [
-          IconButton(
-            onPressed: () {
-              additem();
-            },
-            icon: const Icon(Icons.done),
-          )
-        ],
+        actions: (widget.title != "Edit Item"
+            ? <Widget>[
+                IconButton(
+                  onPressed: () async {
+                    String result = await addItem();
+                    if (result != "") {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.done),
+                )
+              ]
+            : <Widget>[
+                IconButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext buildContext) => (YesNoModel(
+                          buildContext: context,
+                          msg:
+                              "Are you sure you want to delete this item?",
+                          callBack: _deleteItem)),
+                    );
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    bool result = await editItem();
+                    if (result) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  icon: const Icon(Icons.done),
+                )
+              ]),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -147,7 +245,32 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ),
               TextFormField(
                 controller: _itemDesController,
-                validator: _mandatoryValidator,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text(
+                  'Select category',
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ),
+              DropdownButton<String>(
+                isExpanded: true,
+                value: dropdownValue0,
+                elevation: 16,
+                style: const TextStyle(color: Colors.black87, fontSize: 16),
+                onChanged: (String? newValue) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  setState(() {
+                    dropdownValue0 = newValue!;
+                  });
+                },
+                items: (categoryStringList)
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 12.0),
@@ -191,41 +314,61 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   style: TextStyle(color: Colors.black54),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _image != null
-                      ? SizedBox(
-                          width: 200, height: 150, child: Image.file(_image!))
-                      : SizedBox(
-                          width: 200,
-                          height: 150,
-                          child: Image.asset("assets/images/imgp.jpg"),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 32.0, bottom: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                            color: kPrimaryColor,
-                            icon: const Icon(
-                              Icons.add_photo_alternate,
-                              size: 35,
+              Container(
+                color: kSecondaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _image != null
+                          ? SizedBox(
+                              width: 160,
+                              height: 150,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.file(
+                                  _image!,
+                                  fit: BoxFit.fill,
+                                ),
+                              ))
+                          : SizedBox(
+                              width: 160,
+                              height: 150,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  _imgURL,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
-                            onPressed: () async {
-                              await pickImage();
-                            }),
-                        IconButton(
-                            color: kPrimaryColor,
-                            icon: const Icon(Icons.add_a_photo, size: 35),
-                            onPressed: () {
-                              pickImageC();
-                            }),
-                      ],
-                    ),
-                  )
-                ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 32.0, bottom: 16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                                color: kPrimaryColor,
+                                icon: const Icon(
+                                  Icons.add_photo_alternate,
+                                  size: 35,
+                                ),
+                                onPressed: () async {
+                                  await pickImage();
+                                }),
+                            IconButton(
+                                color: kPrimaryColor,
+                                icon: const Icon(Icons.add_a_photo, size: 35),
+                                onPressed: () {
+                                  pickImageC();
+                                }),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
