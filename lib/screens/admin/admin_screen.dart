@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/constants.dart';
 import 'package:shopping_app/screens/admin/item/add_item.dart';
+import 'package:shopping_app/screens/admin/notes/show_data.dart';
 import '../login_screen.dart';
 import 'dashboard_screen.dart';
 import 'item/item_screen.dart';
@@ -22,7 +23,8 @@ class _AdminScreenState extends State<AdminScreen> {
     DashboardScreen(),
     OrderScreen(),
     ItemScreen(),
-    SupplierScreen()
+    SupplierScreen(),
+    ShowdataPage()
   ];
 
   @override
@@ -162,11 +164,15 @@ class _AdminScreenState extends State<AdminScreen> {
                   SizedBox(
                     width: 8,
                   ),
-                  Text('Messages')
+                  Text('Notes')
                 ],
               ),
               onTap: () {
-
+                setState(() {
+                  _selectedIndex = 4;
+                  _title = "Notes";
+                });
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -183,11 +189,11 @@ class _AdminScreenState extends State<AdminScreen> {
                 ],
               ),
               onTap: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
-                  );
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
               },
             ),
           ],
